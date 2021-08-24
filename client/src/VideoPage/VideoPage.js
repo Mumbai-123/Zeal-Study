@@ -18,7 +18,7 @@ const VideoPage = () => {
 	let i = 0;
 
 	while (true) {
-		if (temp[i] === "/" || temp[i] === "=") {
+		if ((temp[i] === "/" || temp[i] === "=") && i < temp.length) {
 			break;
 		}
 		link += temp[i];

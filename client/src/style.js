@@ -4,7 +4,7 @@ export default makeStyles(
 	(theme) => ({
 		appBar: {
 			borderRadius: 15,
-			margin: "30px 0",
+			margin: "20px 0",
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
@@ -26,6 +26,11 @@ export default makeStyles(
 			"&:hover": {
 				background: "#efefef",
 			},
+		},
+		textField: {
+			marginLeft: theme.spacing(1),
+			marginRight: theme.spacing(1),
+			width: "25ch",
 		},
 	}),
 	{ index: 1 }

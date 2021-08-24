@@ -3,7 +3,8 @@ import ClassesTable from "./ClassesTable/ClassesTable";
 import SubjectsTable from "./SubjectsTable/SubjectsTable";
 import ChaptersTable from "./ChaptersTable/ChaptersTable";
 import VideoPage from "./VideoPage/VideoPage";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import UploadForm from "./UploadForm/UploadForm";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 function App() {
 	return (
@@ -20,6 +21,9 @@ function App() {
 				</Route>
 				<Route path="/view">
 					<VideoPage />
+				</Route>
+				<Route path="/upload">
+					<UploadForm />
 				</Route>
 			</Switch>
 		</BrowserRouter>

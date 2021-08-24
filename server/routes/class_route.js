@@ -24,87 +24,156 @@ router.get("/allSubjects/:class", async (req, res) => {
 router.get("/allChapters/:currentClass/:currentSubject", async (req, res) => {
 	try {
 		const currentClass = await Class.findOne({ name: req.params.currentClass });
-		let chapterList=[];
+		let chapterList = [];
 		currentClass.subjects.map((item) => {
-			if (item.subjectName === req.params.currentSubject)
-			{
+			if (item.subjectName === req.params.currentSubject) {
 				chapterList = item.chapters;
 				return;
 			}
-		})
+		});
 
 		res.json(chapterList);
-		
 	} catch (err) {
 		res.status(404).json({ message: err.message });
 	}
 });
 
-router.post("/createClass", async (req, res) => {
+router.post("/upload", async (req, res) => {
 	try {
-		const newClass = new Class({
-			name: req.body.className,
-			subjects: [],
-		});
-		await newClass.save();
-		res.status(200).json({ newClass });
-	} catch (err) {
-		res.status(404).json({ message: err.message });
-	}
-});
-
-router.post("/createSubject", async (req, res) => {
-	try {
-		const existingClass = await Class.findOne({ name: req.body.className });
-		existingClass.subjects.push({
+		const request = {
+			className: req.body.className,
 			subjectName: req.body.subjectName,
-			chapters: [],
+			chapterName: req.body.chapterName,
+			topicName: req.body.topicName,
+			video: req.body.video,
+			pdf: req.body.pdf,
+		};
+
+		const existingClass = await Class.findOne({ name: request.className });
+
+		if (!existingClass) {
+			const newClass = new Class({
+				name: request.className,
+				subjects: [
+					{
+						subjectName: request.subjectName,
+						chapters: [
+							{
+								chapterName: request.chapterName,
+								topics: [
+									{
+										topicName: request.topicName,
+										video: request.video,
+										pdf: request.pdf,
+									},
+								],
+							},
+						],
+					},
+				],
+			});
+
+			await newClass.save();
+			res.status(200).json({ newClass });
+			return;
+		}
+
+		let existSubject = false;
+		let iS;
+
+		existingClass.subjects.map((item, key) => {
+			if (item.subjectName === request.subjectName) {
+				existSubject = true;
+				iS = key;
+				return;
+			}
 		});
+
+		if (!existSubject) {
+			existingClass.subjects.push({
+				subjectName: request.subjectName,
+				chapters: [
+					{
+						chapterName: request.chapterName,
+						topics: [
+							{
+								topicName: request.topicName,
+								video: request.video,
+								pdf: request.pdf,
+							},
+						],
+					},
+				],
+			});
+
+			await existingClass.save();
+			res.status(200).json({ existingClass });
+			return;
+		}
+
+		let existChapter = false;
+		let iC;
+
+		existingClass.subjects[iS].chapters.map((item, key) => {
+			if (item.chapterName === request.chapterName) {
+				existChapter = true;
+				iC = key;
+				return;
+			}
+		});
+
+		if (!existChapter) {
+			existingClass.subjects[iS].chapters.push({
+				chapterName: request.chapterName,
+				topics: [
+					{
+						topicName: request.topicName,
+						video: request.video,
+						pdf: request.pdf,
+					},
+				],
+			});
+
+			await existingClass.save();
+			res.status(200).json({ existingClass });
+			return;
+		}
+
+		let existTopic = false;
+		let iT;
+
+		existingClass.subjects[iS].chapters[iC].topics.map((item, key) => {
+			if (item.topicName === request.topicName) {
+				existTopic = true;
+				iT = key;
+				return;
+			}
+		});
+
+		if (!existTopic) {
+			existingClass.subjects[iS].chapters[iC].topics.push({
+				topicName: request.topicName,
+				video: request.video,
+				pdf: request.pdf,
+			});
+
+			await existingClass.save();
+			res.status(200).json({ existingClass });
+			return;
+		}
+
+		existingClass.subjects[iS].chapters[iC].topics[iT] = {
+			topicName: request.topicName,
+			video: request.video,
+			pdf: request.pdf,
+		};
+
 		await existingClass.save();
 		res.status(200).json({ existingClass });
+		return;
 	} catch (err) {
 		res.status(404).json({ message: err.message });
 	}
 });
 
-router.post("/createChapter", async (req, res) => {
-	try {
-		const existingClass = await Class.findOne({ name: req.body.className });
-		existingClass.subjects.map((item) => {
-			if (item.subjectName === req.body.subjectName) {
-				item.chapters.push({
-					chapterName: req.body.chapterName,
-					topics: [],
-				});
-			}
-		});
-		await existingClass.save();
-		res.status(200).json({ existingClass });
-	} catch (err) {
-		res.status(404).json({ message: err.message });
-	}
-});
-
-router.post("/createTopic", async (req, res) => {
-	try {
-		const existingClass = await Class.findOne({ name: req.body.className });
-		existingClass.subjects.map((item) => {
-			if (item.subjectName === req.body.subjectName) {
-				item.chapters.map((value) => {
-					if (value.chapterName == req.body.chapterName) {
-						value.topics.push({
-							topicName: req.body.topicName,
-							video: req.body.video,
-							pdf: req.body.pdf,
-						});
-					}
-				});
-			}
-		});
-		await existingClass.save();
-		res.status(200).json({ existingClass });
-	} catch (err) {
-		res.status(404).json({ message: err.message });
-	}
-});
 export default router;
