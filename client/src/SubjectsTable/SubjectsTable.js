@@ -73,7 +73,7 @@ const SubjectsTable = () => {
 															"currentSubject",
 															item.subjectName
 														);
-														window.location.pathname = `/subject/${item.subjectName}`;
+														window.location.pathname = `https://zealstudy.netlify.app/subject/${item.subjectName}`;
 													}}
 												>
 													Open

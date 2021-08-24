@@ -67,7 +67,7 @@ const ClassesTable = () => {
 													}}
 													onClick={() => {
 														localStorage.setItem("currentClass", item.name);
-														window.location = `/class/${item.name}`;
+														window.location = `https://zealstudy.netlify.app/class/${item.name}`;
 													}}
 												>
 													Open
