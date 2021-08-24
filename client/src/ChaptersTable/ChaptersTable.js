@@ -71,7 +71,7 @@ function Row(props) {
 														"currentTopic",
 														JSON.stringify(item)
 													);
-													window.location.pathname = `https://zealstudy.netlify.app/view/${item._id}`;
+													window.location = `https://zealstudy.netlify.app/view/${item._id}`;
 												}}
 											>
 												{item.topicName}
