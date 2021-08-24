@@ -10,18 +10,8 @@ const app = express();
 app.use(express.json({ limit: "20mb", extended: true }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 
-// app.use(passport.initialize());
-
 app.options("*", cors());
 app.use("/", cors(), class_route);
-// app.use("/student", cors(), studentRoutes);
-// app.use("/authTeacher", cors(), authTeacher);
-// app.use("/authStudent", cors(), authStudent);
-// app.use("/teacher", cors(), teacherRoutes);
-
-// app.get("/", (req, res) => {
-// 	res.send("Welcome to Student Portal API");
-// });
 
 mongoose.connect(
 	process.env.mongoURI,
