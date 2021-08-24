@@ -16,7 +16,9 @@ const ClassesTable = () => {
 
 	useEffect(() => {
 		async function fetch() {
-			const response = await axios.get("http://localhost:5000/allClasses");
+			const response = await axios.get(
+				"https://zealacademy.herokuapp.com/allClasses"
+			);
 
 			await setClass(response.data);
 		}

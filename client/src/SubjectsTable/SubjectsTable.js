@@ -19,7 +19,9 @@ const SubjectsTable = () => {
 
 	useEffect(() => {
 		async function fetch() {
-			const response = await axios.get(`http://localhost:5000/allSubjects/${saved}`);
+			const response = await axios.get(
+				`https://zealacademy.herokuapp.com/allSubjects/${saved}`
+			);
 
 			await setSubjects(response.data);
 		}

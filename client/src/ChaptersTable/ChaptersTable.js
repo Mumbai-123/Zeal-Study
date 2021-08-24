@@ -27,9 +27,9 @@ const useRowStyles = makeStyles({
 function Row(props) {
 	const { row } = props;
 	const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
-  const classes2 = useStyles();
-  
+	const classes = useRowStyles();
+	const classes2 = useStyles();
+
 	return (
 		<React.Fragment>
 			<TableRow className={classes.root}>
@@ -92,13 +92,13 @@ const ChaptersTable = () => {
 	const classes = useStyles();
 	const [allChapters, setallChapters] = useState([]);
 
-  let currentSubject = localStorage.getItem("currentSubject");
-  let currentClass = localStorage.getItem("currentClass");
+	let currentSubject = localStorage.getItem("currentSubject");
+	let currentClass = localStorage.getItem("currentClass");
 
 	useEffect(() => {
 		async function fetch() {
 			const response = await axios.get(
-				`http://localhost:5000/allChapters/${currentClass}/${currentSubject}`
+				`https://zealacademy.herokuapp.com/allChapters/${currentClass}/${currentSubject}`
 			);
 
 			await setallChapters(response.data);
@@ -107,7 +107,7 @@ const ChaptersTable = () => {
 		fetch();
 	}, []);
 
-  return (
+	return (
 		<Grid container justifyContent="space-evenly" alignItems="stretch">
 			<Grid
 				item
