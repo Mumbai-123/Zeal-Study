@@ -14,8 +14,7 @@ const SubjectsTable = () => {
 	const classes = useStyles();
 	const [allSubjects, setSubjects] = useState([]);
 
-	let stored = localStorage.getItem("currentClass");
-	let saved = JSON.parse(stored);
+	let saved = localStorage.getItem("currentClass");
 
 	useEffect(() => {
 		async function fetch() {
