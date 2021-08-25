@@ -14,6 +14,8 @@ const ClassesTable = () => {
 	const classes = useStyles();
 	const [allClasses, setClass] = useState([]);
 
+	localStorage.setItem("heading", "All Classes");
+
 	useEffect(() => {
 		async function fetch() {
 			const response = await axios.get(
@@ -42,7 +44,6 @@ const ClassesTable = () => {
 					color="inherit"
 					style={{ width: "90%" }}
 				>
-					<h2 style={{ color: "#424E5D" }}>All classes</h2>
 					<TableContainer component={Paper}>
 						<Table className={classes.table}>
 							<TableBody>

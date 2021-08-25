@@ -12,21 +12,18 @@ function App() {
 		<BrowserRouter>
 			<Switch>
 				<Route exact path="/">
-					{localStorage.setItem("heading", "All Classes")}
 					<Helmet>
 						<title>{"All Classes | Study Material | ZeAl Academy"}</title>
 					</Helmet>
 					<ClassesTable />
 				</Route>
 				<Route path="/class">
-					{localStorage.setItem("heading", "All Subjects")}
 					<Helmet>
 						<title>{"All Subjects | Study Material | ZeAl Academy"}</title>
 					</Helmet>
 					<SubjectsTable />
 				</Route>
 				<Route path="/subject">
-					{localStorage.setItem("heading", "All Chapters")}
 					<Helmet>
 						<title>{"All Chapters | Study Material | ZeAl Academy"}</title>
 					</Helmet>

@@ -92,6 +92,8 @@ const ChaptersTable = () => {
 	const classes = useStyles();
 	const [allChapters, setallChapters] = useState([]);
 
+	localStorage.setItem("heading", "All Chapters");
+
 	let currentSubject = localStorage.getItem("currentSubject");
 	let currentClass = localStorage.getItem("currentClass");
 
@@ -123,7 +125,6 @@ const ChaptersTable = () => {
 					color="inherit"
 					style={{ width: "90%" }}
 				>
-					<h2 style={{ color: "#424E5D" }}>All chapters</h2>
 					<TableContainer component={Paper}>
 						<Table className={classes.table}>
 							<TableBody>

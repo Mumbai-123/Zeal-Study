@@ -11,6 +11,8 @@ import CustomBackdrop from "../components/CustomBackdrop/CustomBackdrop";
 const UploadForm = () => {
 	const classes = useStyles();
 
+	localStorage.setItem("heading", "Upload Portal");
+
 	const [allClasses, setallClasses] = useState([]);
 	const [allSubjects, setallSubjects] = useState([]);
 	const [allChapters, setallChapters] = useState([]);
@@ -113,7 +115,6 @@ const UploadForm = () => {
 						color="inherit"
 						style={{ width: "90%", margin: "20px auto" }}
 					>
-						<h2 style={{ color: "#424E5D" }}>Upload Portal</h2>
 						<form
 							className={classes.root}
 							noValidate

@@ -14,6 +14,8 @@ const SubjectsTable = () => {
 	const classes = useStyles();
 	const [allSubjects, setSubjects] = useState([]);
 
+	localStorage.setItem("heading", "All Subjects");
+
 	let saved = localStorage.getItem("currentClass");
 
 	useEffect(() => {
@@ -44,7 +46,6 @@ const SubjectsTable = () => {
 					color="inherit"
 					style={{ width: "90%" }}
 				>
-					<h2 style={{ color: "#424E5D" }}>All subjects</h2>
 					<TableContainer component={Paper}>
 						<Table className={classes.table}>
 							<TableBody>
