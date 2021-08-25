@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <style>
-        body{
-            margin: 0;
-        }
-        div{
-        display: flex;}
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<style>
+			body {
+				margin: 0;
+			}
+			div {
+				display: flex;
+			}
 
-        .full-width{
-            margin:0;
-            padding: 10px;
-            width: 100%;
-        }
+			.full-width {
+				margin: 0;
+				padding: 10px;
+				width: 100%;
+			}
 
-        .bg{
-            background-color: #55c595;
-        }
-        .bg-light{
-            background-color: #48545C;
-        }
-    </style>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="full-width bg" style="justify-content: center;">
-        <h1 style="color:white;">All Classes</h1>
-    </div>
-    
-    <div id="root"></div>
+			.bg {
+				background-color: #55c595;
+			}
+			.bg-light {
+				background-color: #48545c;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div class="full-width bg" style="justify-content: center">
+			<h1 id="heading" style="color: white"></h1>
+		</div>
 
-    <div class="full-width bg-light" style="justify-content: center;">
-        <p style="color:white; margin: 0;">Initiative by <a style="color:rgb(114, 216, 177);" href="https://zeal.academy">ZeAl Academy.</a></p>
-    </div>
-  </body>
+		<div id="root"></div>
+
+		<div class="full-width bg-light" style="justify-content: center">
+			<p style="color: white; margin: 0">
+				Initiative by
+				<a style="color: rgb(114, 216, 177)" href="https://zeal.academy"
+					>ZeAl Academy.</a
+				>
+			</p>
+		</div>
+
+		<script>
+			document.onLoad(
+				"DOMContentLoaded",
+				(document.getElementById("heading").innerHTML =
+					localStorage.getItem("heading"))
+			);
+		</script>
+	</body>
 </html>
