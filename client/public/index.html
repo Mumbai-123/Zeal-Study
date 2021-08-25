@@ -8,16 +8,12 @@
 			body {
 				margin: 0;
 			}
-			div {
-				display: flex;
-			}
-
 			.full-width {
 				margin: 0;
 				padding: 10px;
 				width: 100%;
+				display: flex;
 			}
-
 			.bg {
 				background-color: #55c595;
 			}
@@ -25,6 +21,7 @@
 				background-color: #48545c;
 			}
 		</style>
+		<title></title>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
@@ -44,11 +41,19 @@
 		</div>
 
 		<script>
-			document.onLoad(
-				"DOMContentLoaded",
-				(document.getElementById("heading").innerHTML =
-					localStorage.getItem("heading"))
-			);
+			function setHeading() {
+				let s = window.location.pathname;
+				if (s == "/") {
+					document.getElementById("heading").innerHTML = "All Classes";
+				} else if (s[1] == "c") {
+					document.getElementById("heading").innerHTML = "All Subjects";
+				} else if (s[1] == "s") {
+					document.getElementById("heading").innerHTML = "All Chapters";
+				} else if (s[1] == "u") {
+					document.getElementById("heading").innerHTML = "Upload Portal";
+				}
+			}
+			document.onLoad("DOMContentLoaded", setHeading());
 		</script>
 	</body>
 </html>

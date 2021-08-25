@@ -92,8 +92,6 @@ const ChaptersTable = () => {
 	const classes = useStyles();
 	const [allChapters, setallChapters] = useState([]);
 
-	localStorage.setItem("heading", "All Chapters");
-
 	let currentSubject = localStorage.getItem("currentSubject");
 	let currentClass = localStorage.getItem("currentClass");
 

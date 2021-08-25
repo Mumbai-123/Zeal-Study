@@ -11,8 +11,6 @@ import CustomBackdrop from "../components/CustomBackdrop/CustomBackdrop";
 const UploadForm = () => {
 	const classes = useStyles();
 
-	localStorage.setItem("heading", "Upload Portal");
-
 	const [allClasses, setallClasses] = useState([]);
 	const [allSubjects, setallSubjects] = useState([]);
 	const [allChapters, setallChapters] = useState([]);

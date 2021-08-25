@@ -14,8 +14,6 @@ const ClassesTable = () => {
 	const classes = useStyles();
 	const [allClasses, setClass] = useState([]);
 
-	localStorage.setItem("heading", "All Classes");
-
 	useEffect(() => {
 		async function fetch() {
 			const response = await axios.get(

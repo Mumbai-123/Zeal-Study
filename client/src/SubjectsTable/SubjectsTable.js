@@ -14,8 +14,6 @@ const SubjectsTable = () => {
 	const classes = useStyles();
 	const [allSubjects, setSubjects] = useState([]);
 
-	localStorage.setItem("heading", "All Subjects");
-
 	let saved = localStorage.getItem("currentClass");
 
 	useEffect(() => {
