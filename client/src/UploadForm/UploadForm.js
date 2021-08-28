@@ -4,14 +4,44 @@ import { AppBar, Grid, Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import CustomAlert from "../components/CustomAlert/CustomAlert";
 import CustomBackdrop from "../components/CustomBackdrop/CustomBackdrop";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 
 const UploadForm = () => {
 	const classes = useStyles();
+	let copy = [];
+	useEffect(() => {
+		async function fetch() {
+			const response = await axios.get(
+				"https://zealacademy.herokuapp.com/allClasses"
+			);
 
-	const [allClasses, setallClasses] = useState([]);
+			await setallClasses(response.data);
+			copy = allClasses;
+		}
+
+		fetch();
+	}, []);
+
+	const [allClasses, setallClasses] = useState([
+		{
+			name: "",
+			subjects: [
+				{
+					subjectName: "",
+					chapters: [
+						{
+							chapterName: "",
+							topics: [{ topicName: "", video: "", pdf: "" }],
+						},
+					],
+				},
+			],
+		},
+	]);
 	const [allSubjects, setallSubjects] = useState([]);
 	const [allChapters, setallChapters] = useState([]);
 	const [allTopics, setallTopics] = useState([]);
@@ -25,18 +55,6 @@ const UploadForm = () => {
 	const [selectSubject, setselectSubject] = useState(true);
 	const [selectChapter, setselectChapter] = useState(true);
 	const [selectTopic, setselectTopic] = useState(true);
-
-	useEffect(() => {
-		async function fetch() {
-			const response = await axios.get(
-				"https://zealacademy.herokuapp.com/allClasses"
-			);
-
-			await setallClasses(response.data);
-		}
-
-		fetch();
-	}, []);
 
 	const [query, setQuery] = useState({
 		className: "",
@@ -69,7 +87,6 @@ const UploadForm = () => {
 
 	let finalRes;
 	const upload = async () => {
-		console.log(existing);
 		setbackdrop(true);
 		if (
 			!existing.className ||
@@ -102,6 +119,154 @@ const UploadForm = () => {
 		}
 	};
 
+	const deleteEntry = async () => {
+		let finalRes;
+		if (!existing.className) {
+			return;
+		}
+		// setbackdrop(true);
+
+		try {
+			await axios.post("https://zealacademy.herokuapp.com/delete", existing);
+		} catch (error) {
+			finalRes = error.response.data;
+		}
+		// setbackdrop(false);
+
+		if (!finalRes) {
+			setsuccMsg("Successfully Deleted");
+			setsuccAlert(true);
+
+			window.location.reload();
+		} else {
+			seterrMsg(finalRes);
+			seterrAlert(true);
+		}
+	};
+
+	const changeClass = async (event) => {
+		if (event.target.value === "Create new") {
+			setcreateClass(true);
+			setcreateSubject(true);
+			setcreateChapter(true);
+			setcreateTopic(true);
+			setselectSubject(false);
+			setselectChapter(false);
+			setselectTopic(false);
+
+			setExisting({
+				...existing,
+				className: "",
+			});
+		} else {
+			setcreateClass(false);
+			setcreateSubject(false);
+			setcreateChapter(false);
+			setcreateTopic(false);
+			setselectSubject(true);
+			setselectChapter(true);
+			setselectTopic(true);
+
+			let x = event.target.value;
+			setQuery({ ...query, cI: x });
+
+			setallSubjects(allClasses[x].subjects);
+
+			setExisting({
+				...existing,
+				className: allClasses[x].name,
+			});
+		}
+		setQuery({ ...query, className: event.target.value });
+	};
+
+	const changeSubject = async (event) => {
+		if (event.target.value === "Create new") {
+			setcreateSubject(true);
+			setcreateChapter(true);
+			setcreateTopic(true);
+			setselectChapter(false);
+			setselectTopic(false);
+
+			setExisting({
+				...existing,
+				subjectName: "",
+			});
+		} else {
+			setcreateSubject(false);
+			setcreateChapter(false);
+			setcreateTopic(false);
+			setselectChapter(true);
+			setselectTopic(true);
+
+			let x = event.target.value;
+
+			setQuery({ ...query, sI: x });
+			setallChapters(allSubjects[x].chapters);
+			setExisting({
+				...existing,
+				subjectName: allSubjects[x].subjectName,
+			});
+		}
+		setQuery({
+			...query,
+			subjectName: event.target.value,
+		});
+	};
+
+	const changeChapter = async (event) => {
+		if (event.target.value === "Create new") {
+			setcreateChapter(true);
+			setcreateTopic(true);
+			setselectTopic(false);
+
+			setExisting({
+				...existing,
+				chapterName: "",
+			});
+		} else {
+			setcreateChapter(false);
+			setcreateTopic(false);
+			setselectTopic(true);
+
+			let x = event.target.value;
+
+			setQuery({ ...query, chI: x });
+			setallTopics(allChapters[x].topics);
+			setExisting({
+				...existing,
+				chapterName: allChapters[x].chapterName,
+			});
+		}
+		setQuery({
+			...query,
+			chapterName: event.target.value,
+		});
+	};
+
+	const changeTopic = (event) => {
+		if (event.target.value === "Create new") {
+			setcreateTopic(true);
+
+			setExisting({
+				...existing,
+				topicName: "",
+			});
+		} else {
+			setcreateTopic(false);
+			let x = event.target.value;
+			setQuery({ ...query, tI: x });
+			setExisting({
+				...existing,
+				topicName: allTopics[x].topicName,
+			});
+		}
+		setQuery({
+			...query,
+			topicName: event.target.value,
+		});
+	};
+
 	return (
 		<Container>
 			<CustomBackdrop open={backdrop} />
@@ -125,59 +290,28 @@ const UploadForm = () => {
 								}
 							}}
 						>
-							{selectClass && (
-								<TextField
-									select
-									label="Select class"
-									style={{ margin: "10px 20px" }}
-									fullWidth
-									margin="normal"
-									variant="outlined"
+							<FormControl
+								variant="outlined"
+								className={classes.formControl}
+								style={{ margin: "10px 20px" }}
+								fullWidth
+							>
+								<InputLabel>Select Class</InputLabel>
+								<Select
+									labelWidth={85}
+									native
 									value={query.className}
-									onChange={(event) => {
-										if (event.target.value === "Create new") {
-											setcreateClass(true);
-											setcreateSubject(true);
-											setcreateChapter(true);
-											setcreateTopic(true);
-											setselectSubject(false);
-											setselectChapter(false);
-											setselectTopic(false);
-
-											setExisting({
-												...existing,
-												className: "",
-											});
-										} else {
-											setcreateClass(false);
-											setcreateSubject(false);
-											setcreateChapter(false);
-											setcreateTopic(false);
-											setselectSubject(true);
-											setselectChapter(true);
-											setselectTopic(true);
-
-											setQuery({ ...query, cI: event.target.value });
-											setallSubjects(allClasses[query.cI].subjects);
-											setExisting({
-												...existing,
-												className: allClasses[query.cI].name,
-											});
-										}
-										setQuery({
-											...query,
-											className: event.target.value,
-										});
-									}}
+									onChange={changeClass}
 								>
-									<MenuItem value="Create new">Create new</MenuItem>
+									<option aria-label="None" value="" />
+									<option value="Create new">Create new</option>
 									{allClasses.map((item, key) => (
-										<MenuItem key={key} value={key}>
+										<option key={key} value={key}>
 											{item.name}
-										</MenuItem>
+										</option>
 									))}
-								</TextField>
-							)}
+								</Select>
+							</FormControl>
 							{createClass && (
 								<TextField
 									label="Enter class"
@@ -195,56 +329,28 @@ const UploadForm = () => {
 								/>
 							)}
 							{selectSubject && (
-								<TextField
-									select
-									label="Select subject"
+								<FormControl
+									variant="outlined"
+									className={classes.formControl}
 									style={{ margin: "10px 20px" }}
 									fullWidth
-									margin="normal"
-									variant="outlined"
-									value={query.subjectName}
-									onChange={(event) => {
-										if (event.target.value === "Create new") {
-											setcreateSubject(true);
-											setcreateChapter(true);
-											setcreateTopic(true);
-											setselectChapter(false);
-											setselectTopic(false);
-
-											setExisting({
-												...existing,
-												subjectName: "",
-											});
-										} else {
-											setcreateSubject(false);
-											setcreateChapter(false);
-											setcreateTopic(false);
-											setselectChapter(true);
-											setselectTopic(true);
-
-											setQuery({ ...query, sI: event.target.value });
-											setallChapters(
-												allClasses[query.cI].subjects[query.sI].chapters
-											);
-											setExisting({
-												...existing,
-												subjectName:
-													allClasses[query.cI].subjects[query.sI].subjectName,
-											});
-										}
-										setQuery({
-											...query,
-											subjectName: event.target.value,
-										});
-									}}
 								>
-									<MenuItem value="Create new">Create new</MenuItem>
-									{allSubjects.map((item, key) => (
-										<MenuItem key={key} value={key}>
-											{item.subjectName}
-										</MenuItem>
-									))}
-								</TextField>
+									<InputLabel>Select Subject</InputLabel>
+									<Select
+										labelWidth={100}
+										native
+										value={query.subjectName}
+										onChange={changeSubject}
+									>
+										<option aria-label="None" value="" />
+										<option value="Create new">Create new</option>
+										{allSubjects.map((item, key) => (
+											<option key={key} value={key}>
+												{item.subjectName}
+											</option>
+										))}
+									</Select>
+								</FormControl>
 							)}
 							{createSubject && (
 								<TextField
@@ -263,56 +369,28 @@ const UploadForm = () => {
 								/>
 							)}
 							{selectChapter && (
-								<TextField
-									select
-									label="Select chapter"
+								<FormControl
+									variant="outlined"
+									className={classes.formControl}
 									style={{ margin: "10px 20px" }}
 									fullWidth
-									margin="normal"
-									variant="outlined"
-									value={query.chapterName}
-									onChange={(event) => {
-										if (event.target.value === "Create new") {
-											setcreateChapter(true);
-											setcreateTopic(true);
-											setselectTopic(false);
-
-											setExisting({
-												...existing,
-												chapterName: "",
-											});
-										} else {
-											setcreateChapter(false);
-											setcreateTopic(false);
-											setselectTopic(true);
-
-											setQuery({ ...query, chI: event.target.value });
-											setallTopics(
-												allClasses[query.cI].subjects[query.sI].chapters[
-													query.chI
-												].topics
-											);
-											setExisting({
-												...existing,
-												chapterName:
-													allClasses[query.cI].subjects[query.sI].chapters[
-														query.chI
-													].chapterName,
-											});
-										}
-										setQuery({
-											...query,
-											chapterName: event.target.value,
-										});
-									}}
 								>
-									<MenuItem value="Create new">Create new</MenuItem>
-									{allChapters.map((item, key) => (
-										<MenuItem key={key} value={key}>
-											{item.chapterName}
-										</MenuItem>
-									))}
-								</TextField>
+									<InputLabel>Select Chapter</InputLabel>
+									<Select
+										labelWidth={105}
+										native
+										value={query.chapterName}
+										onChange={changeChapter}
+									>
+										<option aria-label="None" value="" />
+										<option value="Create new">Create new</option>
+										{allChapters.map((item, key) => (
+											<option key={key} value={key}>
+												{item.chapterName}
+											</option>
+										))}
+									</Select>
+								</FormControl>
 							)}
 							{createChapter && (
 								<TextField
@@ -331,46 +409,28 @@ const UploadForm = () => {
 								/>
 							)}
 							{selectTopic && (
-								<TextField
-									select
-									label="Select topic"
+								<FormControl
+									variant="outlined"
+									className={classes.formControl}
 									style={{ margin: "10px 20px" }}
 									fullWidth
-									margin="normal"
-									variant="outlined"
-									value={query.topicName}
-									onChange={(event) => {
-										if (event.target.value === "Create new") {
-											setcreateTopic(true);
-
-											setExisting({
-												...existing,
-												topicName: "",
-											});
-										} else {
-											setcreateTopic(false);
-											setQuery({ ...query, tI: event.target.value });
-											setExisting({
-												...existing,
-												topicName:
-													allClasses[query.cI].subjects[query.sI].chapters[
-														query.chI
-													].topics[query.tI].topicName,
-											});
-										}
-										setQuery({
-											...query,
-											topicName: event.target.value,
-										});
-									}}
 								>
-									<MenuItem value="Create new">Create new</MenuItem>
-									{allTopics.map((item, key) => (
-										<MenuItem key={key} value={key}>
-											{item.topicName}
-										</MenuItem>
-									))}
-								</TextField>
+									<InputLabel>Select Topic</InputLabel>
+									<Select
+										labelWidth={85}
+										native
+										value={query.topicName}
+										onChange={changeTopic}
+									>
+										<option aria-label="None" value="" />
+										<option value="Create new">Create new</option>
+										{allTopics.map((item, key) => (
+											<option key={key} value={key}>
+												{item.topicName}
+											</option>
+										))}
+									</Select>
+								</FormControl>
 							)}
 							{createTopic && (
 								<TextField
@@ -390,6 +450,7 @@ const UploadForm = () => {
 							)}
 							<TextField
 								label="Video link"
+								helperText="You don't need to fill this for deletion"
 								style={{ margin: "10px 20px" }}
 								margin="normal"
 								variant="outlined"
@@ -405,6 +466,7 @@ const UploadForm = () => {
 							<TextField
 								fullWidth
 								label="Pdf link"
+								helperText="You don't need to fill this for deletion"
 								style={{ margin: "10px 20px" }}
 								margin="normal"
 								variant="outlined"
@@ -423,11 +485,24 @@ const UploadForm = () => {
 								style={{
 									backgroundColor: "#55C595",
 									color: "white",
-									margin: "0 auto",
-									width: "50%",
+									margin: "10px auto",
+									width: "60%",
 								}}
 							>
 								Upload
+							</Button>
+
+							<Button
+								variant="contained"
+								onClick={deleteEntry}
+								style={{
+									backgroundColor: "red",
+									color: "white",
+									margin: "10px auto",
+									width: "60%",
+								}}
+							>
+								Delete
 							</Button>
 						</form>
 					</AppBar>

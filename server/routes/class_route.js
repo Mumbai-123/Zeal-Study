@@ -176,4 +176,89 @@ router.post("/upload", async (req, res) => {
 	}
 });
 
+router.post("/delete", async (req, res) => {
+	// console.log(req.body);
+	try {
+		const existingClass = await Class.findOne({ name: req.body.className });
+
+		if (!existingClass) {
+			res.status(404).send("No such entry exists");
+			return;
+		}
+
+		if (!req.body.subjectName) {
+			const deleted = await Class.deleteOne({ name: req.body.className });
+			// Class.save();
+			res.status(200).json(deleted);
+			return;
+		}
+
+		let isSubject = false;
+		let iS;
+
+		existingClass.subjects.map((item, key) => {
+			if (item.subjectName === req.body.subjectName) {
+				isSubject = true;
+				iS = key;
+				return;
+			}
+		});
+
+		if (!isSubject) {
+			res.status(404).send("No such entry exists");
+			return;
+		}
+
+		if (!req.body.chapterName) {
+			existingClass.subjects.splice(iS, 1);
+			await existingClass.save();
+			res.status(200).json(existingClass);
+			return;
+		}
+
+		let isChapter = false;
+		let iC;
+
+		existingClass.subjects[iS].chapters.map((item, key) => {
+			if (item.chapterName === req.body.chapterName) {
+				isChapter = true;
+				iC = key;
+				return;
+			}
+		});
+
+		if (!isChapter) {
+			res.status(404).send("No such entry exists");
+			return;
+		}
+
+		if (!req.body.topicName) {
+			existingClass.subjects[iS].chapters.splice(iC, 1);
+			await existingClass.save();
+			res.status(200).json(existingClass);
+			return;
+		}
+
+		let isTopic = false;
+		let iT;
+
+		existingClass.subjects[iS].chapters[iC].topics.map((item, key) => {
+			if (item.topicName === req.body.topicName) {
+				isTopic = true;
+				iT = key;
+				return;
+			}
+		});
+
+		if (!isTopic) {
+			res.status(404).send("No such entry exists");
+			return;
+		}
+
+		existingClass.subjects[iS].chapters[iC].topics.splice(iT, 1);
+		await existingClass.save();
+		res.status(200).json(existingClass);
+	} catch (err) {}
+});
+
 export default router;
