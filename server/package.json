@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "14.15.1"
+  },
   "scripts": {
     "start": "nodemon index.js"
   },
