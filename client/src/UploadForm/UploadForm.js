@@ -9,6 +9,7 @@ import CustomBackdrop from "../components/CustomBackdrop/CustomBackdrop";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import { Redirect } from "react-router-dom";
 
 const UploadForm = () => {
 	const classes = useStyles();
@@ -266,6 +267,10 @@ const UploadForm = () => {
 			topicName: event.target.value,
 		});
 	};
+
+	if (!window.sessionStorage.getItem("user")) {
+		return <Redirect to="/authentication" />;
+	}
 
 	return (
 		<Container>
