@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import class_route from "./routes/class_route.js";
+import auth_route from "./routes/authentication.js";
+import passport from "passport";
+import "./config/passport.js";
 
 const app = express();
 // app.use(cors());
@@ -10,8 +13,11 @@ const app = express();
 app.use(express.json({ limit: "20mb", extended: true }));
 app.use(express.urlencoded({ limit: "20mb", extended: true }));
 
+app.use(passport.initialize());
+
 app.options("*", cors());
 app.use("/", cors(), class_route);
+app.use("/auth", cors(), auth_route);
 
 mongoose.connect(
 	process.env.mongoURI,

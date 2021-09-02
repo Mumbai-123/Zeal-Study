@@ -5,6 +5,7 @@ import SubjectsTable from "./SubjectsTable/SubjectsTable";
 import ChaptersTable from "./ChaptersTable/ChaptersTable";
 import VideoPage from "./VideoPage/VideoPage";
 import UploadForm from "./UploadForm/UploadForm";
+import Authentication from "./Authentication/Authentication";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 function App() {
@@ -40,6 +41,12 @@ function App() {
 						<title>{"Upload Portal | ZeAl Academy"}</title>
 					</Helmet>
 					<UploadForm />
+				</Route>
+				<Route path="/authentication">
+					<Helmet>
+						<title>{"Authentication | ZeAl Academy"}</title>
+					</Helmet>
+					<Authentication />
 				</Route>
 			</Switch>
 		</BrowserRouter>
